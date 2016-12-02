@@ -1,18 +1,7 @@
-def up(p):
-    if p < 3: return p
-    return p - 3
-
-def down(p):
-    if p > 5: return p
-    return p + 3
-
-def left(p):
-    if p % 3 == 0: return p
-    return p - 1
-
-def right(p):
-    if (p-2) % 3 == 0: return p
-    return p + 1
+def up(p):    return p if p < 3        else p - 3
+def down(p):  return p if p > 5        else p + 3
+def left(p):  return p if p % 3 == 0   else p - 1
+def right(p): return p if (p-2)%3 == 0 else p + 1
 
 lut = { 'U': up, 'D': down, 'L': left, 'R': right }
 
