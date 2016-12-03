@@ -11,9 +11,49 @@ def fwd(s, n):
     elif d == 3: x -= n
     return (d, x, y)
 
-with open('input') as f:
-    data = f.read().strip().split(', ')
+def move(s, i):
+    n = fwd(turn(s, i[0]), int(i[1:]))
+    return n
 
-s = reduce(lambda x, y: fwd(turn(x, y[0]), int(y[1:])), data, (0,0,0))
+def part1(data):
+    s = reduce(move, data, (0,0,0))
+    print 'Part1:', dist(s)
 
-print s[1]+s[2]
+def dist(s): return abs(s[1])+abs(s[2])
+
+def points_between(s, a, b):
+    dx = b[0]-a[0]
+    dy = b[1]-a[1]
+    if dx != 0: dx = dx / abs(dx)
+    if dy != 0: dy = dy / abs(dy)
+    x, y = a
+    while (x, y) != b:
+        c = (x, y)
+        if c in s:
+            return s, c
+        s.add(c)
+        x += dx
+        y += dy
+    return s, None
+
+def part2(data):
+    s = (0,0,0)
+    seen = set()
+    result = None
+    for y in data:
+        x = move(s, y)
+        seen, result = points_between(seen, s[1:], x[1:])
+        s = x
+        if result: break
+    print 'Part2:', dist((0,)+result)
+
+def load():
+    with open('input') as f:
+        return f.read().strip().split(', ')
+
+def main():
+    data = load()
+    part1(data)
+    part2(data)
+
+if __name__ == '__main__': main()
