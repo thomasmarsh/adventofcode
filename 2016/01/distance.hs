@@ -1,41 +1,39 @@
 -- My first Haskell program
+
 import Data.List.Split
+
 main = do
     line <- getLine
-    if null line
-        then return ()
-        else do
-            putStrLn $ (show (calcDistance line))
-            main
+    putStrLn $ (show (calcDistance line))
 
-data State  = State { d :: Int, x :: Int, y :: Int }
+right d | d >= 3 = 0 | otherwise = d + 1
+left  d | d == 0 = 3 | otherwise = d - 1
 
-right d = (d+1) `mod` 4
-left d
-    | d == 0 = 3
-    | otherwise = (d-1) `mod` 4
+handleTurn d c
+    | c == 'R' = right d
+    | c == 'L' = left d
+    | otherwise = error "Unexpected direction"
 
-rightS s = State { d = right (d s), x = x s, y = y s }
-leftS s = State { d = left (d s), x = x s, y = y s }
+forward pos d n
+    | d == 0 = (x,   y-n)
+    | d == 1 = (x+n, y)
+    | d == 2 = (x,   y+n)
+    | d == 3 = (x-n, y)
+    | otherwise = (x, y)
+    where
+        x = fst pos
+        y = snd pos
 
-handleTurn state c
-    | c == 'R' = rightS state
-    | c == 'L' = leftS state
-    | otherwise  = state
+move (pos, dir) dirc n = (forward pos newDir n, newDir)
+    where newDir = handleTurn dir dirc
 
-forward s n
-    | (d s) == 0 = State { d = d s, x = x s,       y = (y s) - n }
-    | (d s) == 1 = State { d = d s, x = (x s) + n, y = y s }
-    | (d s) == 2 = State { d = d s, x = x s,       y = (y s) + n }
-    | (d s) == 3 = State { d = d s, x = (x s) - n, y = y s }
-    | otherwise = s
+handleInstruction state s = move state (s !! 0) (read (tail s) :: Int)
 
-handleInstruction state s = forward (handleTurn state (s !! 0)) (read (tail s) :: Int)
+initialState = ((0, 0), 0)
 
-initialState = State { d = 0, x = 0, y = 0 }
+calcState line = foldl handleInstruction initialState (splitOn ", " line)
 
-calcState line = foldl (\x y -> handleInstruction x y) initialState (splitOn ", " line)
-
-distance s = (x s) + (y s)
+distance s = (fst pos) + (snd pos)
+    where pos = fst s
 
 calcDistance s = distance $ calcState(s)
