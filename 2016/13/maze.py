@@ -1,4 +1,5 @@
 from collections import deque
+import math
 
 def f(x, y):
     return x*x + 3*x + 2*x*y + y + y*y
@@ -40,13 +41,22 @@ def bfs(g, start, end):
     while q:
         current, count, path = q.popleft()
         if current == end:
-            return count, path
+            return count, path + [current]
         path = path[:]
         path.append(current)
         for p in g[current]:
             if not p in seen:
                 seen.add(p)
                 q.append((p, count+1, path))
+
+def under_50(g, (w, h), a, n):
+    c = 0
+    for y in range(w):
+        for x in range(h):
+            result = bfs(g, a, (x, y))
+            if result and result[0] <= 50:
+                c += 1
+    return c
 
 def run(dim, a, b, n):
     assert(not is_wall(a[0], a[1], n))
@@ -60,8 +70,9 @@ def run(dim, a, b, n):
         p(dim, n, path)
         print count
 
+    print 'Part 2:', under_50(g, dim, a, n)
+
 run((10, 7), (1, 1), (7, 4), 10)
-#run((14, 14), (1, 1), (11, 11), 1362)
 
 print
 print '--'
