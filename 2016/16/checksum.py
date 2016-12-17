@@ -25,3 +25,4 @@ assert(checksum('110010110100') == '100')
 assert(checksum(data('10000', 20)) == '01100')
 
 print 'Part 1:', checksum(data('10111011111001111', 272))
+print 'Part 2:', checksum(data('10111011111001111', 35651584))
