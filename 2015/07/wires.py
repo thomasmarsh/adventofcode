@@ -18,7 +18,6 @@ def eval2(k, g, memo):
             assert(v[0] == 'NOT')
             memo[k] = ~eval2(v[1], g, memo) & 0xffff
         else:
-            print v
             assert(len(v) == 3)
             x, op, y = v
             if op == 'AND':
@@ -31,16 +30,18 @@ def eval2(k, g, memo):
                 memo[k] = eval2(x, g, memo) >> int(y)
             else:
                 raise 'Unexpected'
-    if memo[k] < 0:
-        print '!!', g[k]
     return memo[k]
 
 def evaluate(g):
     memo = {}
     for k in g.keys():
-        print '{}:'.format(k), eval2(k, g, memo)
+        eval2(k, g, memo)
     return memo
 
 g = parse(open(sys.argv[1], 'r').read().splitlines())
 m = evaluate(g)
 print 'Part 1:', m['a']
+
+g['b'] = [str(m['a'])]
+m = evaluate(g)
+print 'Part 2:', m['a']
