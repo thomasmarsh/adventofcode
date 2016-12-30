@@ -31,7 +31,6 @@ def viable(g):
                     count += 1
     return count
 
-
 def p(g, (mx, my)):
     wall = g[(0,0)][0]
     for y in range(my+1):
@@ -49,7 +48,20 @@ def p(g, (mx, my)):
                 print '.',
         print
 
+def find_empty(g, (mx, my)):
+    for y in range(my+1):
+        for x in range(mx+1):
+            if g[(x, y)][1] == 0:
+                return x, y
+    return None
+
+def distance(g, (mx, my)):
+    x0, y0 = find_empty(g, (mx, my))
+    return x0-2+y0+mx+(mx-1)*5 
+
 g, (mx, my) = load()
 print 'Part 1:', viable(g)
+print 'Part 2:',  distance(g, (mx, my))
+# Print the map
+#p(g, (mx, my))
 
-p(g, (mx, my))
