@@ -32,11 +32,10 @@ pairs l = [(x,y) | (x:y:xs) <- tails l]
 
 -- Calculates the total distance given a graph and a route
 distance :: Graph -> [String] -> Int
-distance g p = go $ pairs p
-    where go [] = 0
-          go (x:xs) = dist + (go xs)
-            where dist = gfind a b g
-                  (a, b) = x
+distance g p = distance' $ pairs p
+    where distance' [] = 0
+          distance' (x:xs) = (gfind a b g) + (distance' xs)
+                where (a, b) = x
 
 -- Brute force calculation just evaluates all permutations
 search :: Graph -> (Int, Int)

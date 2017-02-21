@@ -24,25 +24,25 @@ def distance(g, path):
             break
     return d
 
-def brute(g, shortest=True):
+def brute(g):
     seen = set()
     cities = g.keys()
-    best = None, sys.maxint if shortest else 0
+    #best = None, sys.maxint if shortest else 0
+    shortest = None, sys.maxint
+    longest = None, 0
     for p in permutations(cities):
         t = tuple(p)
         if t not in seen:
             seen.add(t)
             seen.add(reversed(t))
             d = distance(g, t)
-            if shortest:
-                if d < best[1]:
-                    best = t, d
-            else:
-                if d > best[1]:
-                    best = t, d
-    return best
+            if d < shortest[1]:
+                shortest = t,d
+            if d > longest[1]:
+                longest = t,d
+    return shortest, longest
 
 g = load()
-
-print 'Part 1:', brute(g)[-1]
-print 'Part 2:', brute(g, False)[-1]
+shortest, longest = brute(g)
+print 'Part 1:', shortest[-1]
+print 'Part 2:', longest[-1]
