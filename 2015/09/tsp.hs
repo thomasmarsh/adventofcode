@@ -9,19 +9,12 @@ gfind ::  String -> String -> Graph -> Int
 gfind a b g = maybe 0 (\x -> find' x) (M.lookup a g)
     where find' x = maybe 0 id (M.lookup b x)
 
--- Returns only unique elements in the list
-dedupe :: Ord a => [a] -> [a]
-dedupe l = go $ sort l
-    where go [] = []
-          go [x] = [x]
-          go (x:xs) = if x /= (xs !! 0) then x : (go xs) else go xs
-
 -- Builds the map using an intermediate [(String,[(String,Int)])] format
 buildFromList :: [(String,String,Int)] -> Graph
 buildFromList xs = M.fromList [(fst y, M.fromList (snd y)) | y <- topMap]
-    where cs = dedupe [a | (a,_,_) <- xs]
+    where cities = nub [a | (a,_,_) <- xs]
           subMap k = [(b, d) | (a, b, d) <- xs, a == k]
-          topMap = [(a, subMap a) | a <- cs]
+          topMap = [(a, subMap a) | a <- cities]
 
 -- For a given a->b mapping, also provide the b->a entry
 fillReverse :: [(String, String, Int)] -> [(String, String, Int)]
@@ -35,9 +28,7 @@ parse s = buildFromList $ fillReverse [parseLine ln | ln <- lines s]
 
 -- Given [1,2,3], will produce [(1,2), (2,3)]
 pairs :: [a] -> [(a,a)]
-pairs [] = []
-pairs [x] = []
-pairs (x:xs) = [(x,xs!!0)] ++ pairs xs
+pairs l = [(x,y) | (x:y:xs) <- tails l]
 
 -- Calculates the total distance given a graph and a route
 distance :: Graph -> [String] -> Int
