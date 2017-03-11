@@ -12,8 +12,8 @@ parseLine [who, "would", verb, n, "happiness", "units", "by",
            "sitting", "next", "to", other] =
     ((who, init other), gainLose verb (read n))
     where
-        gainLose "lose" n = -n
-        gainLose "gain" n = n
+        gainLose "lose" m = -m
+        gainLose "gain" m = m
         gainLose _ _ = error "bad verb"
 parseLine _ = error "bad preference"
 
@@ -22,28 +22,31 @@ parse s = M.fromList entries
     where entries = map (parseLine . words) (lines s)
 
 guests :: Weights -> [String]
-guests w = nub [a | (a, b) <- (M.keys w)]
+guests w = nub [a | (a, _) <- (M.keys w)]
 
 triples :: [a] -> [[a]]
 triples = (divvy 3 1) . wrap
     where wrap [] = []
           wrap [x] = [x]
           wrap [x,y] = [x,y,x]
-          wrap all@(x:y:xs) = all ++ [x,y]
+          wrap z@(x:y:_) = z ++ [x,y]
 
--- TODO: memoize to avoid seen entries
+uniquePerms :: Weights -> [[String]]
+uniquePerms w = map (first :) $ permutations (tail g)
+    where g = guests w
+          first = g !! 0
+
 happiness :: Weights -> [String] -> ([String], Int)
 happiness w g = (g, sum $ map happiness' (triples g))
     where happiness' triple
-            | length triple == 3 = ((lookup l) + (lookup r))
+            | length triple == 3 = ((look l) + (look r))
             | otherwise = error "arity mismatch"
               where [l,p,r] = triple
-                    lookup k = fromJust (M.lookup (p, k) w)
+                    look k = fromJust (M.lookup (p, k) w)
 
 happiest :: Weights -> Int
 happiest w = snd (maximumBy (comparing snd) s)
-    where p = permutations (guests w)
-          s = map (happiness w) p
+    where s = map (happiness w) (uniquePerms w)
 
 addSelf :: Weights -> Weights
 addSelf w = add' w (guests w)
