@@ -1,20 +1,13 @@
 import System.Environment (getArgs)
-import Data.List (minimumBy)
-import Data.Ord (comparing)
+import Data.List (minimumBy, subsequences)
 
 target = 150
 
-combinations :: Int -> [a] -> [[a]]
-combinations 0 _ = [[]]
-combinations n xs = [xs !! i : x | i <- [0..(length xs)-1],
-                        x <- combinations (n-1) (drop (i+1) xs)]
-
 solve :: [Int] -> (Int, Int)
 solve xs = (length targetCapacity, length targetQuantity)
-    where allCombos = concat [combinations n xs | n <- [1..length xs]]
-          targetCapacity = filter (\x -> sum x == target) allCombos
-          minimumLength = length $ minimumBy (comparing length) targetCapacity
-          targetQuantity = filter (\x -> length x == minimumLength) targetCapacity
+    where targetCapacity = filter ((== target) . sum) $ (subsequences xs)
+          minLen = minimum $ map length $ targetCapacity
+          targetQuantity = filter ((== minLen) . length) $ targetCapacity
 
 main = do
     [path] <- getArgs
