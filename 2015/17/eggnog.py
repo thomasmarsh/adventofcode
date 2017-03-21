@@ -3,7 +3,7 @@ from itertools import combinations
 def load():
     return map(int, open('input', 'r').read().splitlines())
 
-def count(data, filt=None):
+def count(data):
     n = 0
     min_len = len(data)
     solutions = []
