@@ -1,4 +1,5 @@
 {-# LANGUAGE FlexibleContexts #-}
+{-# LANGUAGE ConstraintKinds #-}
 
 import System.Environment (getArgs)
 import Data.List.Split (splitOn)
@@ -7,7 +8,8 @@ import Data.Array.IO (IOUArray, MArray, newArray, readArray, writeArray)
 bound = 999
 
 type Coord = (Int, Int)
-type Lights a = IOUArray Coord a
+type Lights = IOUArray Coord Int
+type MLights = MArray IOUArray Int
 data Mode = English | Elvish
 
 parseCoord :: String -> Coord
@@ -38,8 +40,8 @@ off Elvish n
     | n > 0 = n-1
     | otherwise = 0
 
-update :: MArray IOUArray Int IO =>
-          Lights Int -> Mode -> ((Mode -> Int -> Int), Coord, Coord) -> IO ()
+update :: MLights IO =>
+          Lights -> Mode -> ((Mode -> Int -> Int), Coord, Coord) -> IO ()
 update a m (fn, (x1, y1), (x2, y2)) = do
     mapM_ update' [(x,y) | x <- [x1..x2], y <- [y1..y2]]
     where update' c = do
@@ -47,17 +49,17 @@ update a m (fn, (x1, y1), (x2, y2)) = do
             writeArray a c (fn m b)
             return ()
 
-apply :: MArray IOUArray Int IO =>
-         Int -> Mode -> [(Mode -> Int -> Int, Coord, Coord)] -> IO ()
-apply part m xs = do
+apply :: MLights IO =>
+         Mode -> [(Mode -> Int -> Int, Coord, Coord)] -> IO Int
+apply m xs = do
     lights <- newArray ((0, 0), (bound, bound)) 0
     mapM_ (update lights m) xs
     ts <- mapM (readArray lights) [(x, y) | x <- [0..bound], y <- [0..bound]]
-    putStrLn $ "Part " ++ (show part) ++ ": " ++ show (sum ts)
+    return $ sum ts
 
 main = do
     [path] <- getArgs
     contents <- readFile path
     let commands = map parseLine (lines contents)
-    apply 1 English commands
-    apply 2 Elvish commands
+    (\x -> "Part 1: " ++ show x) <$> (apply English commands) >>= putStrLn
+    (\x -> "Part 2: " ++ show x) <$> (apply Elvish commands) >>= putStrLn
