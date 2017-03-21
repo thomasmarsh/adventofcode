@@ -5,11 +5,12 @@ import System.Environment (getArgs)
 import Data.List.Split (splitOn)
 import Data.Array.IO (IOUArray, MArray, newArray, readArray, writeArray)
 
+bound :: Int
 bound = 999
 
 type Coord = (Int, Int)
 type Lights = IOUArray Coord Int
-type MLights = MArray IOUArray Int
+type MLights = MArray IOUArray Int IO
 data Mode = English | Elvish
 
 parseCoord :: String -> Coord
@@ -31,32 +32,29 @@ toggle English n = 1-n
 toggle Elvish n = n+2
 
 on :: Mode -> Int -> Int
-on English n = 1
+on English _ = 1
 on Elvish n = n+1
 
 off :: Mode -> Int -> Int
-off English n = 0 
+off English _ = 0 
 off Elvish n
     | n > 0 = n-1
     | otherwise = 0
 
-update :: MLights IO =>
-          Lights -> Mode -> ((Mode -> Int -> Int), Coord, Coord) -> IO ()
-update a m (fn, (x1, y1), (x2, y2)) = do
-    mapM_ update' [(x,y) | x <- [x1..x2], y <- [y1..y2]]
-    where update' c = do
-            b <- readArray a c
-            writeArray a c (fn m b)
-            return ()
+update :: MLights => Lights -> Mode -> ((Mode -> Int -> Int), Coord, Coord) -> IO ()
+update a m (fn, (x1, y1), (x2, y2)) = mapM_ update' [(x,y) | x <- [x1..x2], y <- [y1..y2]]
+    where update' coord = do
+            x <- readArray a coord
+            writeArray a coord (fn m x)
 
-apply :: MLights IO =>
-         Mode -> [(Mode -> Int -> Int, Coord, Coord)] -> IO Int
+apply :: MLights => Mode -> [(Mode -> Int -> Int, Coord, Coord)] -> IO Int
 apply m xs = do
     lights <- newArray ((0, 0), (bound, bound)) 0
     mapM_ (update lights m) xs
     ts <- mapM (readArray lights) [(x, y) | x <- [0..bound], y <- [0..bound]]
     return $ sum ts
 
+main :: IO ()
 main = do
     [path] <- getArgs
     contents <- readFile path
