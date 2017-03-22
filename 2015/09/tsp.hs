@@ -23,12 +23,12 @@ fillReverse xs = xs ++ [(b,a,d) | (a,b,d) <- xs]
 -- Build the graph from the input string
 parse :: String -> Graph
 parse s = buildFromList $ fillReverse [parseLine ln | ln <- lines s]
-    where parseLine s = (a, b, (read::String->Int) dist)
-            where [a, _, b, _, dist] = words s
+    where parseLine s' = (a, b, (read::String->Int) dist)
+            where [a, _, b, _, dist] = words s'
 
 -- Given [1,2,3], will produce [(1,2), (2,3)]
 pairs :: [a] -> [(a,a)]
-pairs l = [(x,y) | (x:y:xs) <- tails l]
+pairs l = [(x,y) | (x:y:_) <- tails l]
 
 -- Calculates the total distance given a graph and a route
 distance :: Graph -> [String] -> Int

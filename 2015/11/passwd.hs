@@ -2,6 +2,7 @@ import           Data.Char
 import           Data.List
 import qualified Data.Set as S
 
+len :: Int
 len = 8
 
 p2n :: String -> Int
@@ -12,9 +13,9 @@ n2p :: Int -> String
 n2p n = prefix ++ p
     where p = reverse $ go n
           prefix = (take (len-(length p)) . repeat) 'a'
-          c n = chr ((n `mod` 26) + (ord 'a'))
+          c m = chr ((m `mod` 26) + (ord 'a'))
           go 0 = ""
-          go n = [c n] ++ go (n `div` 26)
+          go m = [c m] ++ go (m `div` 26)
 
 window :: Int -> [a] -> [[a]]
 window n = foldr (zipWith (:)) (repeat []) . take n . tails
@@ -27,8 +28,9 @@ isStraight p = or [and [b == a+1,
 validChars :: String -> Bool
 validChars p = not $ or [elem c p | c <- "iol"]
 
+pairs :: Eq a => [a] -> [a]
 pairs [] = []
-pairs [x] = []
+pairs [_] = []
 pairs (x:y:xs) = if x == y
                  then [x] ++ pairs xs
                  else pairs (y:xs)
@@ -55,10 +57,11 @@ replaceInvalid p = map repl p
 
 nextValid :: String -> String
 nextValid p = go $ next p
-    where go p
-            | isValid p = p
-            | otherwise = go $ replaceInvalid (next p)
+    where go q
+            | isValid q = q
+            | otherwise = go $ replaceInvalid (next q)
 
+main :: IO ()
 main = do
     let p = nextValid "cqjxjnds"
     putStrLn $ "Part 1: " ++ p

@@ -17,7 +17,7 @@ target = M.fromList [
 parse :: String -> Sues
 parse s = map match ws
     where ws = map (map strip . tail . words) (lines s)
-          strip s | last s == ',' || last s == ':' = init s | otherwise = s
+          strip x | last x == ',' || last x == ':' = init x | otherwise = x
           buildEntry k v = (k, read v :: Int)
           match [sueStr, s1, n1, s2, n2, s3, n3] =
                 (read sueStr :: Int,
@@ -34,7 +34,7 @@ matches a b = values ks a == values ks b
     where ks = M.keys a `intersect` M.keys b
 
 rangeMatches :: Profile -> Profile -> Bool
-rangeMatches a b = and (map test ks)
+rangeMatches a b = all test ks
     where ks = M.keys a `intersect` M.keys b
           test k 
             | elem k ["cats", "trees"] = a' > b'
@@ -43,11 +43,12 @@ rangeMatches a b = and (map test ks)
             where (a',b') = (a!k, b!k)
 
 search :: Sues -> (Profile -> Profile -> Bool) -> Int
-search [] fn = error "not found"
+search [] _ = error "not found"
 search ((sue, profile):xs) fn
     | fn profile target = sue
     | otherwise = search xs fn
 
+main :: IO ()
 main = do
     [path] <- getArgs
     contents <- readFile path

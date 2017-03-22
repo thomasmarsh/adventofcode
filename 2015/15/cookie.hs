@@ -11,6 +11,7 @@ parseLine [_, "capacity", a,
               "texture", d,
               "calories", e] = [x a, x b, x c, x d, read e::Int]
     where x s = (read $ init s::Int)
+parseLine _ = error "parse error"
 
 parse :: String -> [[Int]]
 parse s = map (parseLine . words) (lines s)

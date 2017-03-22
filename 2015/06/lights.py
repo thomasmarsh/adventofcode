@@ -2,7 +2,7 @@ import sys
 import re
 
 def lit(state):
-    return reduce(lambda x, y: reduce(lambda a, b: b+a, y, 0)+x, state, 0)
+    return sum(map(lambda x: sum(x), state))
 
 def apply(state, mode, (fn, (x1, y1, x2, y2))):
     for x in range(x1, x2+1):
