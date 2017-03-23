@@ -25,10 +25,9 @@ player = foldl (\p x -> p {attack = attack p + damage x,
     where playerInitial = Fighter { hp = 100, attack = 0, defence = 0 }
 
 choices :: [[Item]]
-choices = base ++ [b ++ r | b <- base, r <- r1]
-               ++ [b ++ r | b <- base, r <- r2]
-    where r1 = filter ((== 1) . length) (subsequences rings)
-          r2 = filter ((== 2) . length) (subsequences rings)
+choices = base ++ [b ++ r | b <- base, r <- rfilt 1]
+               ++ [b ++ r | b <- base, r <- rfilt 2]
+    where rfilt n = filter ((== n) . length) (subsequences rings)
           base = [[w] | w <- weapons] ++ [[w,a] | w <- weapons, a <- armor]
           weapons = genItems [(8, 4, 0), (10, 5, 0), (25, 6, 0), (40, 7, 0), (74, 8, 0)]
           armor   = genItems [(13, 0, 1), (31, 0, 2), (53, 0, 3), (75, 0, 4), (102, 0, 5)]
