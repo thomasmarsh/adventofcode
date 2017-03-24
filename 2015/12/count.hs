@@ -1,5 +1,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 
+module Main where
+
 import           Data.Aeson
 import qualified Data.ByteString.Lazy.Char8 as B
 import qualified Data.HashMap.Strict as M
@@ -11,7 +13,7 @@ import           System.Environment
 data Mode = Normal | IgnoreRed deriving (Eq)
 
 jsum :: Mode -> String -> Int
-jsum mode jsonString = jsum' $ fromJust $ ((decode . B.pack) jsonString :: Maybe Value)
+jsum mode jsonString = jsum' $ fromJust ((decode . B.pack) jsonString :: Maybe Value)
     where jsum' (Number y) = fromIntegral $ S.coefficient y
           jsum' (Array y)  = sum (map jsum' $ V.toList y)
           jsum' (Object y) | mode == IgnoreRed && String "red" `elem` M.elems y = 0

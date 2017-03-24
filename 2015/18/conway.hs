@@ -1,3 +1,5 @@
+module Main where
+
 import           System.Environment (getArgs)
 import qualified Data.Map.Strict as M
 import           Data.Maybe (fromJust)

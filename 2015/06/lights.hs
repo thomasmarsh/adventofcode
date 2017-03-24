@@ -1,6 +1,8 @@
 {-# LANGUAGE FlexibleContexts #-}
 {-# LANGUAGE ConstraintKinds #-}
 
+module Main where
+
 import System.Environment (getArgs)
 import Data.List.Split (splitOn)
 import Data.Array.IO (IOUArray, MArray, newArray, readArray, writeArray)

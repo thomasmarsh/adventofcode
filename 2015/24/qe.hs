@@ -1,3 +1,5 @@
+module Main where
+
 import System.Environment (getArgs)
 
 combinations :: Int -> [a] -> [[a]]

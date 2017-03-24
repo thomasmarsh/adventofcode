@@ -4,7 +4,6 @@ rings = [(25, 1, 0), (50, 2, 0), (100, 3, 0), (20, 0, 1), (40, 0, 2), (80, 0, 3)
 
 
 def fight(boss, weapon, armor, rings):
-    print weapon, armor, rings
     player_damage = weapon[1] + sum([x[1] for x in rings])
     player_defence = armor[1] + sum([x[2] for x in rings])
     p = [[100, player_damage, player_defence], boss[:]]
@@ -12,7 +11,6 @@ def fight(boss, weapon, armor, rings):
     hp, damage, defence = 0, 1, 2
 
     turn = 0
-    print p
     while p[0][hp] > 0 and p[1][hp] > 0:
         cur, other = turn % 2, (turn+1) % 2
         inflicted = p[cur][damage] - p[other][defence]

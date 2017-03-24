@@ -1,3 +1,5 @@
+module Main where
+
 import           Data.Char
 import           Data.List
 import qualified Data.Set as S

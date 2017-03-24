@@ -1,3 +1,5 @@
+module Main where
+
 import Data.Digest.Pure.MD5
 import qualified Data.ByteString.Lazy.Char8 as L
 

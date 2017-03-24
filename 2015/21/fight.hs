@@ -1,3 +1,5 @@
+module Main where
+
 import Control.Arrow ((&&&))
 import Data.List (subsequences)
 

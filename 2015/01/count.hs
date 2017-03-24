@@ -1,3 +1,5 @@
+module Main where
+
 import System.Environment
 import Data.Maybe
 import Data.List
@@ -9,11 +11,11 @@ part1 :: String -> Int
 part1 s = sum $ map trans s
 
 part2 :: String -> Int
-part2 s = 1 + (fromJust . elemIndex (-1) . scanl1 (+) $ (map trans s))
+part2 s = 1 + (fromJust . elemIndex (-1) . scanl1 (+) $ map trans s)
 
 main :: IO ()
 main = do
    args <- getArgs
-   content <- readFile (args !! 0)
+   content <- readFile (head args)
    putStrLn $ "Part 1: " ++ show (part1 content)
    putStrLn $ "Part 2: " ++ show (part2 content)

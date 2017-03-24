@@ -1,3 +1,5 @@
+module Main where
+
 import           Data.List (intersect)
 import           Data.Map ((!), Map)
 import qualified Data.Map as M

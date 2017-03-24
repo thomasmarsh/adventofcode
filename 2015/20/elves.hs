@@ -1,3 +1,5 @@
+module Main where
+
 import Data.List (group, sort, elemIndex)
 import Data.Maybe (fromJust)
 

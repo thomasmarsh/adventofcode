@@ -1,3 +1,5 @@
+module Main where
+
 target :: (Int, Int)
 target = (3029, 2947)
 

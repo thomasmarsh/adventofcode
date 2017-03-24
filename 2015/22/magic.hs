@@ -1,3 +1,5 @@
+module Main where
+
 import           Data.Foldable (toList)
 import qualified Data.Map as M
 import           Data.Maybe (fromJust)

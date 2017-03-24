@@ -1,5 +1,7 @@
 *.o
 *.hi
+cabal.sandbox.config
+.cabal-sandbox
 2015/01/count
 2015/02/area
 2015/03/deliver

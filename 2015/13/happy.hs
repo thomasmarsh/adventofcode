@@ -1,3 +1,5 @@
+module Main where
+
 import           Data.List (maximumBy, nub, permutations)
 import           Data.List.Split (divvy)
 import qualified Data.Map.Strict as M
