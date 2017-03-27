@@ -179,3 +179,10 @@ Executable             code
   main-is:             code.hs
   hs-source-dirs:      2015/25
   default-language:    Haskell2010
+
+Executable             triangle
+  build-depends:       base >= 4.7 && < 5,
+                       split >= 0.2
+  main-is:             triangle.hs
+  hs-source-dirs:      2016/03
+  default-language:    Haskell2010
