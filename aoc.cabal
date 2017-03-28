@@ -192,3 +192,10 @@ Executable             discs
   main-is:             discs.hs
   hs-source-dirs:      2016/15
   default-language:    Haskell2010
+
+Executable             traps
+  build-depends:       base >= 4.7 && < 5,
+                       split >= 0.2
+  main-is:             traps.hs
+  hs-source-dirs:      2016/18
+  default-language:    Haskell2010
