@@ -13,8 +13,8 @@ isValid _ = error "invalid column count"
 validCount :: [[Int]] -> Int
 validCount = length . filter isValid
 
-tValidCount :: [[Int]] -> Int
-tValidCount xs = (length . filter isValid) (concatMap (chunksOf 3) (transpose xs))
+transpose' :: [[Int]] -> [[Int]]
+transpose' xs = concatMap (chunksOf 3) (transpose xs)
 
 main :: IO ()
 main = do
@@ -22,4 +22,4 @@ main = do
     contents <- readFile path
     let xs = parse contents
     putStrLn $ "Part 1: " ++ show (validCount xs)
-    putStrLn $ "Part 2: " ++ show (tValidCount xs)
+    putStrLn $ "Part 2: " ++ show (validCount $ transpose' xs)
