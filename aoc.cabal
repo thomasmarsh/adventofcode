@@ -193,6 +193,13 @@ Executable             discs
   hs-source-dirs:      2016/15
   default-language:    Haskell2010
 
+Executable             checksum
+  build-depends:       base >= 4.7 && < 5,
+                       split >= 0.2
+  main-is:             checksum.hs
+  hs-source-dirs:      2016/16
+  default-language:    Haskell2010
+
 Executable             traps
   build-depends:       base >= 4.7 && < 5,
                        split >= 0.2
