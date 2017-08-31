@@ -7,7 +7,6 @@ class Room:
         tmp, checksum = s.split('[')
         parts = tmp.split('-')
         assert(checksum[-1] == ']')
-        self.raw = s
         self.checksum = checksum[:-1]
         self.sector_id = int(parts[-1])
         self.name = '-'.join(parts[:-1])
@@ -54,14 +53,16 @@ def part1(data):
     n = 0
     for line in data:
         n += sector_if_valid(line)
-    print n
+    return n
 
 def part2(data):
     for line in data:
         r = Room(line)
         if r.valid():
-            print r.decrypt(), r.sector_id, r.raw
+            if r.decrypt().split()[0] == 'northpole':
+                return r.sector_id
+    return None
 
 data = load()
-part1(data)
-part2(data)
+print 'Part 1:', part1(data)
+print 'Part 2:', part2(data)
