@@ -42,7 +42,7 @@ stepScanners :: [Scanner] -> [Scanner]
 stepScanners = fmap stepScanner
 
 cost :: Time -> [Scanner] -> Severity
-cost n [] = 0
+cost _ [] = 0
 cost n (x:xs)
     | otherwise = severity + next
     where
@@ -54,6 +54,7 @@ cost n (x:xs)
 minimumDelay :: [Scanner] -> Time
 minimumDelay = go 0
     where
+        go n [] = n
         go n xs@(x:_)
                 | cost 0 xs == 0 && pos x /= 0 = n
                 | otherwise = go (n+1) (stepScanners xs)

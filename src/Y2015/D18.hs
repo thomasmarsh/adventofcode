@@ -61,7 +61,7 @@ fixCorners (mx, my) lights = foldl (\t x -> M.insert x True t) lights corners
                      (0, my-1), (mx-1, my-1)]
 
 idFn :: Coord -> Lights -> Lights
-idFn _ lights = lights
+idFn = const id
 
 step :: (Coord -> Lights -> Lights) -> Coord -> Lights -> Lights
 step fn dim lights =

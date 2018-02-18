@@ -1,7 +1,7 @@
 module Y2015.D03 where
 
-import System.Environment
-import Data.List
+import System.Environment (getArgs)
+import Data.List (scanl, sort, group)
 
 move :: Char -> (Int, Int) -> (Int, Int)
 move c (x,y)
@@ -12,10 +12,10 @@ move c (x,y)
     | otherwise = (x,y)
 
 houses :: [Char] -> [(Int, Int)]
-houses route = scanl (\x y -> move y x) (0,0) route
+houses = scanl (flip move) (0, 0)
 
 unique :: Ord a => [a] -> Int
-unique xs = length . group $ sort xs
+unique = length . group . sort
 
 each :: Int -> [a] -> [a]
 each n = map head . takeWhile (not . null) . iterate (drop n)
@@ -24,7 +24,7 @@ everyOther :: [a] -> [a]
 everyOther = each 2
 
 deliver :: String -> Int
-deliver route = unique $ houses route
+deliver = unique . houses
 
 deliver2 :: String -> Int
 deliver2 route = unique (santa ++ robot)

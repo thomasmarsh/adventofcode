@@ -2,7 +2,6 @@ module Y2017.D11 where
 
 import System.Environment (getArgs)
 import Data.List.Split (splitOn)
-import Data.List (maximumBy)
 import Data.String.Utils (rstrip)
 
 data Pos
@@ -12,6 +11,7 @@ data Pos
     , z :: Int
     } deriving (Eq, Show)
 
+initPos :: Pos
 initPos = Pos { x = 0, y = 0, z = 0 }
 
 delta :: String -> Pos
@@ -21,6 +21,7 @@ delta "ne" = initPos { x =  1, z = -1 }
 delta "sw" = initPos { x = -1, z =  1 }
 delta "se" = initPos { x =  1, y = -1 }
 delta "nw" = initPos { x = -1, y =  1 }
+delta _ = error "bad case"
 
 move :: Pos -> Pos -> Pos
 move pos d
@@ -33,9 +34,9 @@ parse = splitOn "," . rstrip
 
 distance :: [String] -> (Int, Int)
 distance steps = go initPos steps 0
-    where go pos (x:xs) mp = go (move pos (delta x)) xs (mp' pos mp)
+    where go pos (q:qs) mp = go (move pos (delta q)) qs (mp' pos mp)
           go pos [] mp = (cubeDist pos, mp' pos mp)
-          mp' pos mp = max (cubeDist pos) mp 
+          mp' = max . cubeDist
 
 cubeDist :: Pos -> Int
 cubeDist pos

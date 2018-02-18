@@ -2,6 +2,7 @@
 
 module Y2017.D12 where
 
+{-  WIP
 import Data.Char (isDigit)
 import Data.Maybe (fromMaybe)
 import qualified Data.Map.Strict as M
@@ -13,7 +14,6 @@ parse :: String -> M.Map Int [Int]
 parse = M.fromList . map parseLine . lines where
     parseLine (words -> x : "<->" : xs) = (read x, read . filter isDigit <$> xs)
 
-{-  WIP
 connected :: (Ord a) => M.Map a [a] -> a -> S.Set a
 connected neighbors = grow S.empty . (:[]) where
     grow s [] = s
@@ -29,9 +29,10 @@ day12b input = length . unfoldr (fmap dropConnected . S.minView) $
                M.keysSet neighbors where
     neighbors = parse input
     dropConnected (x, xs) = ((), xs S.\\ connected neighbors x)
--}
 
+main :: IO ()
 main = do
     [path] <- getArgs
     contents <- readFile path
     print $ parse contents
+-}
