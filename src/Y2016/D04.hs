@@ -30,7 +30,7 @@ decrypt :: Parsed -> String
 decrypt (encrypted, sectorId, _) = map (rotate sectorId) encrypted
 
 rc :: Parsed -> String
-rc room@(encrypted, _, _) = take 5 $ map fst sorted
+rc (encrypted, _, _) = take 5 $ map fst sorted
     where unique = nub $ filter (/= '-') encrypted
           counts = [length $ filter (== c) encrypted | c <- unique]
           sorted = sortBy cmp (zip unique counts)
@@ -50,6 +50,7 @@ part2 ps = sectorId
     where findNorthPole p = "northpole" == head (splitOn " " (decrypt p))
           (_, sectorId, _) = head $ filter findNorthPole ps
 
+main :: IO ()
 main = do
     [path] <- getArgs
     contents <- readFile path

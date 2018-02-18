@@ -32,20 +32,22 @@ nextPos pad pos d
     where pos' = move pos d
 
 solveKey :: Keypad -> Pos -> String -> Pos
-solveKey pad pos [] = pos
+solveKey _ pos [] = pos
 solveKey pad pos (x:xs) = solveKey pad (nextPos pad pos x) xs
 
 solve :: Keypad -> Pos -> [String] -> String
 solve pad pos ss = map (charAt pad) $ go pos ss []
     where go :: Pos -> [String] -> [Pos] -> [Pos]
-          go pos' [] result = reverse result
+          go _ [] result = reverse result
           go pos' (x:xs) result = go pos'' xs (pos'' : result)
             where pos'' = solveKey pad pos' x
 
+keypad1 :: [String]
 keypad1 = ["123",
-           "456",
-           "789"]
+          "456",
+          "789"]
 
+keypad2 :: [String]
 keypad2 = ["**1**",
            "*234*",
            "56789",

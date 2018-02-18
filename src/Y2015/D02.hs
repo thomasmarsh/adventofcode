@@ -7,6 +7,7 @@ import Control.Monad (liftM2, ap)
 
 area :: [Int] -> Int
 area [l,w,h] = 2*l*w + 2*w*h + 2*h*l
+area _ = error "invalid dimensions"
 
 smallest :: [Int] -> [Int]
 smallest = take 2 . sort

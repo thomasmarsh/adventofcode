@@ -10,13 +10,13 @@ unescaped n ('\\':'"':xs) = unescaped (n+1) xs
 unescaped n ('\\':'x':a:b:xs) 
     | isHexDigit a && isHexDigit b = unescaped (n+1) xs
     | otherwise = error "parse error"
-unescaped n (x:xs) = unescaped (n+1) xs
+unescaped n (_:xs) = unescaped (n+1) xs
 
 escaped :: Int -> String -> Int
 escaped n [] = n
 escaped n ('"':xs) = escaped (n+2) xs
 escaped n ('\\':xs) = escaped (n+2) xs
-escaped n (x:xs) = escaped (n+1) xs
+escaped n (_:xs) = escaped (n+1) xs
 
 p1 :: String -> Int
 p1 s = length s - unescaped (-2) s

@@ -40,14 +40,13 @@ readInt :: String -> Int
 readInt s = fromMaybe 0 (readMaybe s :: Maybe Int)
 
 parseReg :: String -> Register
-parseReg s
-    | isRegister s =
-        case s of
-            "a" -> A
-            "b" -> B
-            "c" -> C
-            "d" -> D
-    | otherwise = error "unknown register"
+parseReg s =
+    case s of
+        "a" -> A
+        "b" -> B
+        "c" -> C
+        "d" -> D
+        _ -> error "bad register"
 
 isRegister :: String -> Bool
 isRegister s = s `isInfixOf` "abcd"
@@ -61,6 +60,7 @@ parseLine ["dec", x] = Dec (parseReg x)
 parseLine ["jnz", x, y]
     | isRegister x = Jnz (Reg (parseReg x)) (readInt y)
     | otherwise = Jnz (Val (readInt x)) (readInt y)
+parseLine _ = error "parse error"
 
 parse :: String -> Program
 parse s = map (parseLine . splitOn " ") (lines s)
@@ -102,7 +102,7 @@ initial :: State
 initial = State { rA = 0, rB = 0, rC = 0, rD = 0, pc = 0 }
 
 run :: Program -> State -> Int
-run prog init = rA $ go init
+run prog start = rA $ go start
     where go st
             | pc st < 0 || pc st > (length prog -1) = st
             | otherwise = go $ exec st (prog !! pc st)

@@ -1,5 +1,6 @@
 {-# LANGUAGE FlexibleContexts #-}
 {-# LANGUAGE ConstraintKinds #-}
+{-# LANGUAGE MonoLocalBinds #-}
 
 module Y2015.D06 where
 
@@ -43,7 +44,7 @@ off Elvish n
     | n > 0 = n-1
     | otherwise = 0
 
-update :: MLights => Lights -> Mode -> ((Mode -> Int -> Int), Coord, Coord) -> IO ()
+update :: MLights => Lights -> Mode -> (Mode -> Int -> Int, Coord, Coord) -> IO ()
 update a m (fn, (x1, y1), (x2, y2)) = mapM_ update' [(x,y) | x <- [x1..x2], y <- [y1..y2]]
     where update' coord = do
             x <- readArray a coord
@@ -61,5 +62,5 @@ main = do
     [path] <- getArgs
     contents <- readFile path
     let commands = map parseLine (lines contents)
-    (\x -> "Part 1: " ++ show x) <$> (apply English commands) >>= putStrLn
-    (\x -> "Part 2: " ++ show x) <$> (apply Elvish commands) >>= putStrLn
+    putStrLn =<< ("Part 1: " ++) . show <$> apply English commands
+    putStrLn =<< ("Part 2: " ++) . show <$> apply Elvish commands

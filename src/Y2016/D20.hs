@@ -4,9 +4,12 @@ import System.Environment (getArgs)
 import Data.List (sort)
 import Data.List.Split (splitOn)
 
+fixCount :: Int -> Int -> Int
+fixCount count n = count + (2::Int)^(32::Int) - n
+
 solve :: [(Int, Int)] -> (Int, Int)
 solve bs = go bs 0 0 (maxBound :: Int)
-    where go [] n count lowest = (lowest, count + 2 ^ 32 - n)
+    where go [] n count lowest = (lowest, fixCount count n)
           go ((lo, hi):xs) n count lowest = go xs n' count' lowest'
             where n'      = if   n <= hi
                             then hi + 1

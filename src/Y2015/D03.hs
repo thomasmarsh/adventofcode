@@ -11,7 +11,7 @@ move c (x,y)
     | c == '>' = (x+1,y)
     | otherwise = (x,y)
 
-houses :: [Char] -> [(Int, Int)]
+houses :: String -> [(Int, Int)]
 houses = scanl (flip move) (0, 0)
 
 unique :: Ord a => [a] -> Int
@@ -34,6 +34,6 @@ deliver2 route = unique (santa ++ robot)
 main :: IO ()
 main = do
     args <- getArgs
-    content <- readFile (args !! 0)
+    content <- readFile (head args)
     putStrLn $ "Part 1: " ++ show (deliver content)
     putStrLn $ "Part 2: " ++ show (deliver2 content)
