@@ -1,32 +1,31 @@
 module Y2015.D02 where
 
-import System.Environment
+import System.Environment (getArgs)
 import Data.List
-import Data.List.Split
+import Data.List.Split (splitOn)
+import Control.Monad (liftM2, ap)
 
 area :: [Int] -> Int
-area dim = 2*l*w + 2*w*h + 2*h*l
-    where [l,w,h] = dim
+area [l,w,h] = 2*l*w + 2*w*h + 2*h*l
 
 smallest :: [Int] -> [Int]
-smallest dim = take 2 $ sort dim
+smallest = take 2 . sort
 
 paper :: [Int] -> Int
-paper dim = area dim + product (smallest dim)
+paper = liftM2 (+) area (product . smallest)
 
 ribbon :: [Int] -> Int
-ribbon dim = perim + bow
-    where perim = sum $ map (*2) (smallest dim)
-          bow = product dim
+ribbon = ap ((+) . sum . map (2 *) . smallest) product
+-- ^ The bow is the product and the rest is the perimter
 
 parseLine :: String -> [Int]
-parseLine s = map (read::String->Int) $ splitOn "x" s
+parseLine = map (read::String->Int) . splitOn "x"
 
 part1 :: [String] -> Int
-part1 ss = sum . map paper $ map parseLine ss
+part1 = sum . map (paper . parseLine)
 
 part2 :: [String] -> Int
-part2 ss = sum . map ribbon $ map parseLine ss
+part2 = sum . map (ribbon . parseLine)
 
 main :: IO ()
 main = do
