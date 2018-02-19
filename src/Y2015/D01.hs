@@ -8,7 +8,7 @@ trans :: Char -> Int
 trans c | c == '(' = 1 | c == ')' = -1 | otherwise = 0
 
 part1 :: String -> Int
-part1 s = sum $ map trans s
+part1 = sum . map trans
 
 part2 :: String -> Int
 part2 s = 1 + (fromJust . elemIndex (-1) . scanl1 (+) $ map trans s)
