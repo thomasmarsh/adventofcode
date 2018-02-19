@@ -32,6 +32,8 @@ dependencies:
 - unordered-containers
 - vector
 - MissingH
+- search-algorithms
+- parsec
 
 library:
   source-dirs: src

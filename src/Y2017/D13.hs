@@ -1,97 +1,61 @@
-{-# LANGUAGE OverloadedStrings #-}
-module Y2017.D13 where
+module Y2017.D13 (run) where
 
-import qualified Data.Text.IO as T
-import qualified Data.Text as T
-import Data.Text.Read (decimal)
+import Text.Parsec
+import Text.Parsec.String (Parser, parseFromFile)
 
 data Direction = Up | Down deriving (Eq, Show)
 
-type Range = Int
-type Pos = Int
+type Range    = Int
+type Pos      = Int
 type Severity = Int
-type Time = Int
+type Time     = Int
 
-data Scanner
-    = Scanner
-    { range :: Range
-    , pos   :: Pos
-    , dir   :: Direction
-    } deriving (Eq, Show)
+posAtTime :: Time -> Range -> Pos
+posAtTime t r = t `mod` (2 * r - 2)
 
-nilScanner :: Scanner
-nilScanner
-    = Scanner
-    { range = 0
-    , pos = 0
-    , dir = Down
-    }
-
-initScanner :: Range -> Scanner
-initScanner r = nilScanner { range = r }
-
-stepScanner :: Scanner -> Scanner
-stepScanner s
-    | range s == 0 = s
-    | dir s == Up   && pos s == 0           = s { pos = 1, dir = Down }
-    | dir s == Down && pos s == range s - 1 = s { pos = (pos s) - 1, dir = Up }
-    | dir s == Up = s { pos = (pos s) - 1 }
-    | otherwise   = s { pos = (pos s) + 1 }
-
-stepScanners :: [Scanner] -> [Scanner]
-stepScanners = fmap stepScanner
-
-cost :: Time -> [Scanner] -> Severity
-cost _ [] = 0
-cost n (x:xs)
-    | otherwise = severity + next
+severity :: [(Range, Time)] -> Severity
+severity xs = sum $ fmap stepCost xs
     where
-        severity
-            | pos x == 0 = n * (range x)
+        stepCost :: (Range, Time) -> Severity
+        stepCost (0, _) = 0
+        stepCost (r, n)
+            | posAtTime n r == 0 = n * r
             | otherwise = 0
-        next = cost (n+1) (stepScanners xs)
 
-minimumDelay :: [Scanner] -> Time
-minimumDelay = go 0
+captures :: [(Range, Time)] -> Time -> Bool
+captures xs t = or $ fmap isCapture xs
     where
-        go n [] = n
-        go n xs@(x:_)
-                | cost 0 xs == 0 && pos x /= 0 = n
-                | otherwise = go (n+1) (stepScanners xs)
+        isCapture :: (Range, Time) -> Bool
+        isCapture (0, _) = False
+        isCapture (r, n) = posAtTime (t+n) r == 0
+
+minimumDelay :: [(Range, Time)] -> Time
+minimumDelay xs = head [ t | t <- [0..], not $ captures xs t]
 
 -- 
 -- Parsing
 -- 
 
-denseToSparse :: [(Int, Int)] -> [Range]
-denseToSparse = go 0
-    where
-        go :: Int -> [(Int, Int)] -> [Range]
-        go _ [] = []
-        go n a@((i,r):xs)
-            | n == i = r:go (n+1) xs
-            | otherwise = 0:go (n+1) a
+sparsify :: Int -> [(Pos, Range)] -> [(Range, Time)]
+sparsify _ [] = []
+sparsify n a@((i,r):xs)
+    | n == i    = (r,n):sparsify (n+1) xs
+    | otherwise = (0,n):sparsify (n+1) a
 
-parseInt :: T.Text -> Int
-parseInt s =
-    case decimal s of
-        Right (n, _) -> n
-        Left _ -> 0
-    
-parseLine :: T.Text -> (Int, Int)
-parseLine s = pair parsed
-    where
-        parsed = fmap parseInt (T.splitOn  ": " s)
-        pair [a,b] = (a,b)
-        pair _ = error "parse error"
+parser :: Parser [(Pos, Range)]
+parser = many1 (layer <* newline)
+  where
+      layer = (,) <$> number <*> (string ": " *> number)
+      number = read <$> many1 digit
 
-parse :: T.Text -> [Scanner]
-parse s = map initScanner $ denseToSparse xs
-    where xs = fmap parseLine (T.lines s)
+withInput :: FilePath -> Parser a -> IO a
+withInput path p = do
+    result <- parseFromFile (p <* optional newline <* eof) path
+    either (error . show) return result
 
 run :: String -> IO ()
-run path = do
-    s <- T.readFile path
-    let xs = parse s
-    putStrLn $ "Part 1: " ++ (show $ cost 0 xs)
-    putStrLn $ "Part 2: " ++ (show $ minimumDelay xs)
+run path =
+    withInput path parser >>= \parsed -> do
+        let xs = sparsify 0 parsed
+        putStrLn $ "Part 1: " ++ show (severity xs)
+        putStrLn $ "Part 2: " ++ show (minimumDelay xs)
