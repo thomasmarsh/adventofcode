@@ -10,7 +10,7 @@ import Data.Bool.Extras (bool)
 -- not my solution
 
 roll :: Int -> [a] -> (Int, Int) -> [a]
-roll len list (count, skip) = end ++ start where
+roll _ list (count, skip) = end ++ start where
     (knot, keep) = splitAt count list
     (start, end) = splitAt skip $ keep ++ reverse knot
 

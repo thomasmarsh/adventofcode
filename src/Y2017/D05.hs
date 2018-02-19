@@ -1,6 +1,5 @@
 module Y2017.D05 where
 
-import Data.List (splitAt)
 import System.Environment (getArgs)
 
 type Prog = [Int]
@@ -9,6 +8,7 @@ replaceNth :: Int -> a -> [a] -> [a]
 replaceNth n newVal (x:xs)
      | n == 0 = newVal:xs
      | otherwise = x:replaceNth (n-1) newVal xs
+replaceNth _ _ [] = error "empty list"
 
 parse :: String -> Prog
 parse s = map (read::String->Int) (lines s)
