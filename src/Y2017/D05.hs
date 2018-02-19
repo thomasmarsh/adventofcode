@@ -1,7 +1,5 @@
 module Y2017.D05 where
 
-{- TODO: fix compilation
-
 import Data.List (splitAt)
 import System.Environment (getArgs)
 
@@ -53,10 +51,10 @@ run2 = go 0
             where (pc', prog', done) = step2 pc prog
 
 runLen :: Prog -> Int
-runLen prog = 1 + (length $ takeWhile (\(_, _, done) -> not done) (run prog))
+runLen prog = 1 + length (takeWhile (\ (_, _, done) -> not done) (run prog))
 
 runLen2 :: Prog -> Int
-runLen2 prog = 1 + length $ takeWhile (\(_, _, done) -> not done) (run2 prog)
+runLen2 prog = 1 + length (takeWhile (\ (_, _, done) -> not done) (run2 prog))
 
 main :: IO ()
 main = do
@@ -66,4 +64,3 @@ main = do
     print $ runLen prog 
     --print $ runLen2 [0, 3, 0, 1, -3]
     print $ runLen2 prog 
--}

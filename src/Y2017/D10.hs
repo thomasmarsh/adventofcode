@@ -1,7 +1,5 @@
 module Y2017.D10 where
 
-{- TODO: fix compile (bool-extras)
- 
 import System.Environment (getArgs)
 import Data.List (foldl', unfoldr)
 import Data.Bits (xor)
@@ -38,4 +36,3 @@ main = do
     contents <- readFile path
     print $ day10a contents
     print $ day10b contents
--}
