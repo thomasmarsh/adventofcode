@@ -8,37 +8,37 @@ len :: Int
 len = 8
 
 p2n :: String -> Int
-p2n p = sum [n c i | (c, i) <- zip (reverse p) [0..((length p)-1)]]
-    where n c i = ((ord c) - (ord 'a')) * (26 ^ i)
+p2n p = sum [n c i | (c, i) <- zip (reverse p) [0..(length p-1)]]
+    where n c i = (ord c - ord 'a') * (26 ^ i)
 
 n2p :: Int -> String
 n2p n = prefix ++ p
     where p = reverse $ go n
-          prefix = (take (len-(length p)) . repeat) 'a'
-          c m = chr ((m `mod` 26) + (ord 'a'))
+          prefix = replicate (len - length p) 'a'
+          c m = chr ((m `mod` 26) + ord 'a')
           go 0 = ""
-          go m = [c m] ++ go (m `div` 26)
+          go m = c m : go (m `div` 26)
 
 window :: Int -> [a] -> [[a]]
 window n = foldr (zipWith (:)) (repeat []) . take n . tails
 
 isStraight :: String -> Bool
-isStraight p = or [and [b == a+1,
-                        c == b+1] | [a,b,c] <- window 3 ns]
+isStraight p = or [ b == a+1 && c == b+1
+                  | [a,b,c] <- window 3 ns]
     where ns = map p2n [[c] | c <- p]
 
 validChars :: String -> Bool
-validChars p = not $ or [elem c p | c <- "iol"]
+validChars p = not $ or [c `elem` p | c <- "iol"]
 
 pairs :: Eq a => [a] -> [a]
 pairs [] = []
 pairs [_] = []
 pairs (x:y:xs) = if x == y
-                 then [x] ++ pairs xs
+                 then x : pairs xs
                  else pairs (y:xs)
 
 hasPairs :: String -> Bool
-hasPairs p = (S.size s) > 1
+hasPairs p = S.size s > 1
     where s = (S.fromAscList . sort . pairs) p
 
 isValid :: String -> Bool
@@ -48,10 +48,10 @@ isValid p = and [length p == len,
                  hasPairs p]
 
 next :: String -> String
-next p = n2p ((p2n p)+1)
+next p = n2p (p2n p+1)
 
 replaceInvalid :: String -> String
-replaceInvalid p = map repl p
+replaceInvalid = map repl
     where repl 'i' = 'j'
           repl 'o' = 'p'
           repl 'l' = 'm'

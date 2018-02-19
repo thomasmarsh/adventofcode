@@ -1,4 +1,4 @@
-{-# LANGUAGE ViewPatterns #-}
+-- {-# LANGUAGE ViewPatterns #-}
 
 module Y2017.D12 where
 

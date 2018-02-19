@@ -39,8 +39,8 @@ rangeMatches :: Profile -> Profile -> Bool
 rangeMatches a b = all test ks
     where ks = M.keys a `intersect` M.keys b
           test k 
-            | elem k ["cats", "trees"] = a' > b'
-            | elem k ["pomeranians", "goldfish"] = a' < b'
+            | k `elem` ["cats", "trees"] = a' > b'
+            | k `elem` ["pomeranians", "goldfish"] = a' < b'
             | otherwise = a' == b'
             where (a',b') = (a!k, b!k)
 

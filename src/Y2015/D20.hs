@@ -21,7 +21,7 @@ search n = (p1, p2)
           p1 = indexTrue $ map ((>= n) .  (*10) . sum) d1
           d2 = [filter ((<= 50) . quot i) d | (i,d) <- zip xs d1]
           p2 = indexTrue $ map ((>= n) . (*11) . sum) d2
-          indexTrue ys = 1 + (fromJust $ True `elemIndex` ys)
+          indexTrue ys = 1 + fromJust (True `elemIndex` ys)
 
 main :: IO ()
 main = do

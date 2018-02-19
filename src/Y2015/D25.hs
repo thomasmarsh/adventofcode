@@ -11,5 +11,4 @@ search x y z
     where z' = (z * 252533) `mod` 33554393
 
 main :: IO ()
-main = do
-    print $ search 1 1 20151125
+main = print $ search 1 1 20151125

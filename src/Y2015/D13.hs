@@ -24,24 +24,23 @@ parse s = M.fromList entries
     where entries = map (parseLine . words) (lines s)
 
 guests :: Weights -> [String]
-guests w = nub [a | (a, _) <- (M.keys w)]
+guests w = nub [a | (a, _) <- M.keys w]
 
 triples :: [a] -> [[a]]
-triples = (divvy 3 1) . wrap
+triples = divvy 3 1 . wrap
     where wrap [] = []
           wrap [x] = [x]
           wrap [x,y] = [x,y,x]
           wrap z@(x:y:_) = z ++ [x,y]
 
 uniquePerms :: Weights -> [[String]]
-uniquePerms w = map (first :) $ permutations (tail g)
+uniquePerms w = map (head g :) $ permutations (tail g)
     where g = guests w
-          first = g !! 0
 
 happiness :: Weights -> [String] -> ([String], Int)
 happiness w g = (g, sum $ map happiness' (triples g))
     where happiness' triple
-            | length triple == 3 = ((look l) + (look r))
+            | length triple == 3 = look l + look r
             | otherwise = error "arity mismatch"
               where [l,p,r] = triple
                     look k = fromJust (M.lookup (p, k) w)

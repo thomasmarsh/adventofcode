@@ -12,11 +12,7 @@ isAnagramOf :: String -> String -> Bool
 isAnagramOf a b = sort a == sort b
 
 containsAnagram :: String -> [String] -> Bool
-containsAnagram a ws = 0 /= n
-    where
-        n = length xs 
-        xs = filter (isAnagramOf a) ws
-
+containsAnagram a ws = 0 /= length (filter (isAnagramOf a) ws)
 
 isAnagram :: [String] -> Bool
 isAnagram ss = not $ or $ go ss

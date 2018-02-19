@@ -12,11 +12,12 @@ pairs s = map (take 2) tails'
 
 nice :: String -> Bool
 nice s = noBad && hasDupe && vowelComplete
-    where noBad = not $ any (\x -> x `isInfixOf` s) bad
-          bad = ["ab", "cd", "pq", "xy"]
-          hasDupe = any allTheSame (pairs s)
-          vowelComplete = 2 < (length . filter (==True) $ map isVowel s)
-          isVowel c = c `elem` "aeiou"
+    where
+        noBad = not (any (`isInfixOf` s) bad)
+        bad = ["ab", "cd", "pq", "xy"]
+        hasDupe = any allTheSame (pairs s)
+        vowelComplete = 2 < (length . filter (==True) $ map isVowel s)
+        isVowel = (`elem` "aeiou")
 
 hasWrapping :: String -> Bool
 hasWrapping s = any isWrapping (tails s)
@@ -27,7 +28,7 @@ hasWrapping s = any isWrapping (tails s)
 hasTwoPairs :: String -> Bool
 hasTwoPairs s
     | length s < 4 = False
-    | any (== head p) $ tail (tail p) = True
+    | elem (head p) $ tail (tail p) = True
     | otherwise = hasTwoPairs (tail s)
     where p = pairs s
 

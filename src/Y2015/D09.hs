@@ -3,13 +3,14 @@ module Y2015.D09 where
 import           Data.List
 import qualified Data.Map as M
 import           System.Environment
+import           Data.Maybe (fromMaybe)
 
 type Graph = M.Map String (M.Map String Int)
 
 -- Simplify querying the graph for an city pair
 gfind ::  String -> String -> Graph -> Int
-gfind a b g = maybe 0 (\x -> find' x) (M.lookup a g)
-    where find' x = maybe 0 id (M.lookup b x)
+gfind a b g = maybe 0 find' (M.lookup a g)
+    where find' x = fromMaybe 0 (M.lookup b x)
 
 -- Builds the map using an intermediate [(String,[(String,Int)])] format
 buildFromList :: [(String,String,Int)] -> Graph
@@ -36,7 +37,7 @@ pairs l = [(x,y) | (x:y:_) <- tails l]
 distance :: Graph -> [String] -> Int
 distance g p = distance' $ pairs p
     where distance' [] = 0
-          distance' (x:xs) = (gfind a b g) + (distance' xs)
+          distance' (x:xs) = gfind a b g + distance' xs
                 where (a, b) = x
 
 -- Brute force calculation just evaluates all permutations

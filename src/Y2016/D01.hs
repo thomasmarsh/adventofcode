@@ -44,7 +44,7 @@ move (pos, dir) dirc n = forward n (pos, newDir)
     where newDir = handleTurn dir dirc
 
 handleInstruction :: State -> String -> State
-handleInstruction state s = move state (s !! 0) (read (tail s) :: Int)
+handleInstruction state s = move state (head s) (read (tail s) :: Int)
 
 pointsBetween :: Pos -> Pos -> [Pos]
 pointsBetween a@(x1, y1) (x2, y2) = take n $ iterate fwd a
@@ -72,7 +72,7 @@ anySeen :: Locations -> [Pos] -> Bool
 anySeen locations ps = or [S.member x locations | x <- ps]
 
 insertPositions :: Locations -> [Pos] -> Locations
-insertPositions = foldl (\x y -> S.insert y x)
+insertPositions = foldl (flip S.insert)
 
 main :: IO ()
 main = do

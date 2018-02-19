@@ -12,7 +12,7 @@ parseLine [_, "capacity", a,
               "flavor", c, 
               "texture", d,
               "calories", e] = [x a, x b, x c, x d, read e::Int]
-    where x s = (read $ init s::Int)
+    where x s = read $ init s::Int
 parseLine _ = error "parse error"
 
 parse :: String -> [[Int]]
@@ -21,14 +21,14 @@ parse s = map (parseLine . words) (lines s)
 -- Scoring
 
 distribute :: [[Int]] -> [Int] -> [[Int]]
-distribute props measures = [map (* (snd x)) (fst x)
+distribute props measures = [map (* snd x) (fst x)
                                     | x <- zip props measures]
 
 eval :: [[Int]] -> [Int] -> (Int, Int)
 eval props measures = (score, calories)
     where d = distribute props measures
           calories = sum $ map last d
-          score = foldr1 (*) $ ((map relu) . map sum . transpose) (map init d)
+          score = product $ (map (relu . sum) . transpose) (map init d)
           relu n | n < 0 = 0 | otherwise = n 
 
 
@@ -41,12 +41,12 @@ amounts = [[i,j,k,n-(i+j+k)] | i <- [0..n],
     where n = 100
 
 evalMany :: [[Int]] -> [[Int]] -> [(Int, Int)]
-evalMany props ms = map (eval props) ms
+evalMany = map . eval
 
 solution :: [[Int]] -> (Int, Int)
 solution props = (fst $ high rs, fst $ high nutritional)
     where rs = evalMany props amounts
-          high xs = maximumBy (comparing fst) xs
+          high = maximumBy (comparing fst)
           nutritional = filter ((==500) . snd) rs
 
 main :: IO ()

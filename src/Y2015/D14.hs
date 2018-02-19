@@ -47,27 +47,27 @@ tryStart (_, _, restDur) state
 stepRacer :: Racer -> State -> State
 stepRacer racer@(speed,_,_) state
     | moving state
-        = tryStop racer (state { flyTime = (flyTime state) + 1,
-                                 distance = (distance state) + speed })
-    | otherwise = tryStart racer (state { restTime = (restTime state) + 1 })
+        = tryStop racer (state { flyTime = flyTime state + 1,
+                                 distance = distance state + speed })
+    | otherwise = tryStart racer (state { restTime = restTime state + 1 })
 
 
 updateScores :: Int -> [State] -> [State]
-updateScores high states = map update' states
+updateScores high = map update'
     where update' s
-            | distance s == high = s { score = (score s) + 1 }
+            | distance s == high = s { score = score s + 1 }
             | otherwise = s
 
 
 step :: [Racer] -> [State] -> [State]
 step racers states = updateScores best stepped
-    where stepped = map (\(r, s) -> stepRacer r s) (zip racers states)
+    where stepped = zipWith stepRacer racers states
           best = maximum [distance s | s <- stepped]
 
 
 findSolution :: String -> (Int, Int)
 findSolution str = (bestDist, bestScore)
-    where racers = map parse $ map words (lines str)
+    where racers = map (parse . words) (lines str)
           states = replicate (length racers) initial
           final = iterate (step racers) states !! runLen
           bestDist = maximum [distance s | s <- final]
