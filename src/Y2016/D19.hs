@@ -17,7 +17,7 @@ josephus n = fromJust (readBin $ showBin n ++ "1")
 
 josephus3 :: Int -> Int
 josephus3 n = n - max (n-2*p) 0
-    where p = floor $ 3 ^ q
+    where p = (floor $ (3::Double) ^ q) :: Int
           q :: Int
           q = floor (logBase (3::Double) (fromIntegral (n-1)))
 
