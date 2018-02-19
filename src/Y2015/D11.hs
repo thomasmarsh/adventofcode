@@ -67,4 +67,4 @@ main :: IO ()
 main = do
     let p = nextValid "cqjxjnds"
     putStrLn $ "Part 1: " ++ p
-    putStrLn $ "Part 2: " ++ (nextValid p)
+    putStrLn $ "Part 2: " ++ nextValid p

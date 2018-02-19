@@ -15,11 +15,11 @@ data State = State { moving   :: Bool,
                    } deriving (Show)
 
 initial :: State
-initial = State { moving = True,
+initial = State { moving   = True,
                   distance = 0,
                   restTime = 0,
-                  flyTime = 0,
-                  score = 0
+                  flyTime  = 0,
+                  score    = 0
                 }
 
 

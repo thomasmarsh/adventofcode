@@ -16,7 +16,7 @@ parseLine [_, "capacity", a,
 parseLine _ = error "parse error"
 
 parse :: String -> [[Int]]
-parse s = map (parseLine . words) (lines s)
+parse = map (parseLine . words) . lines
 
 -- Scoring
 

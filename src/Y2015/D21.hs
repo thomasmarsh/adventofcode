@@ -3,17 +3,19 @@ module Y2015.D21 where
 import Control.Arrow ((&&&))
 import Data.List (subsequences)
 
-data Item = Item {
-    cost :: Int,
-    damage :: Int,
-    protection :: Int
-} deriving (Show)
+data Item
+    = Item
+    { cost       :: Int
+    , damage     :: Int
+    , protection :: Int
+    } deriving (Show)
 
-data Fighter = Fighter {
-    hp :: Int,
-    attack :: Int,
-    defence :: Int
-} deriving (Show)
+data Fighter
+    = Fighter
+    { hp      :: Int
+    , attack  :: Int
+    , defence :: Int
+    } deriving (Show)
 
 genItems :: [(Int, Int, Int)] -> [Item]
 genItems = map (\(c, d, a) -> Item { cost=c, damage=d, protection=a })

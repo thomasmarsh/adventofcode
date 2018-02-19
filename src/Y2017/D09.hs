@@ -27,14 +27,16 @@ initState
 go :: String -> State -> State
 go [] st = st
 go (c:xs) st
-    | inGarbage st && c /= '>' = go xs st { garbage = garbage st + 1 }
-    | otherwise = case c of
-                    '{' -> go xs st { depth = depth st + 1 }
-                    '}' -> go xs st { score = score st + depth st
-                                    , depth = depth st - 1 }
-                    '>' -> go xs st { inGarbage = False }
-                    '<' -> go xs st { inGarbage = True }
-                    _   -> go xs st
+    | inGarbage st && c /= '>'
+        = go xs st { garbage = garbage st + 1 }
+    | otherwise
+        = case c of
+            '{' -> go xs st { depth = depth st + 1 }
+            '}' -> go xs st { score = score st + depth st
+                            , depth = depth st - 1 }
+            '>' -> go xs st { inGarbage = False }
+            '<' -> go xs st { inGarbage = True }
+            _   -> go xs st
 
 run :: String -> State
 run s = go (stripCanceled s) initState
