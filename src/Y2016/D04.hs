@@ -38,8 +38,8 @@ rc (encrypted, _, _) = take 5 $ map fst sorted
                             | otherwise = compare a b
 
 sectorValue :: Parsed -> Int
-sectorValue room@(_, sectorId, checksum)
-    | rc room == checksum = sectorId
+sectorValue p@(_, sectorId, checksum)
+    | rc p == checksum = sectorId
     | otherwise = 0
 
 part1 :: [Parsed] -> Int

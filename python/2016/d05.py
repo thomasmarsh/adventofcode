@@ -30,8 +30,8 @@ def part2(prefix):
             value = digest[6]
             if pos.isdigit() and int(pos) < len(p) and p[int(pos)] == '_':
                 p[int(pos)] = value
-                print ''.join(p)
+                #print ''.join(p)
     return ''.join(p)
 
-#part1(prefix)
-part2(prefix)
+print 'Part 1:', part1(prefix)
+print 'Part 2:', part2(prefix)

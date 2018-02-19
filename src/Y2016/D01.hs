@@ -62,11 +62,17 @@ calcState :: String -> State
 calcState line = foldl handleInstruction initialState (splitOn ", " line)
 
 distance :: State -> Int
-distance s = (fst pos) + (snd pos)
+distance s = uncurry (+) pos
     where pos = fst s
 
 calcDistance :: String -> Int
-calcDistance s = distance $ calcState(s)
+calcDistance s = distance $ calcState s
+
+anySeen :: Locations -> [Pos] -> Bool
+anySeen locations ps = or [S.member x locations | x <- ps]
+
+insertPositions :: Locations -> [Pos] -> Locations
+insertPositions = foldl (\x y -> S.insert y x)
 
 main :: IO ()
 main = do

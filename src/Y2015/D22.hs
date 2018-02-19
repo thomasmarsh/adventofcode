@@ -22,13 +22,15 @@ data State = State {
     stEffects    :: [Int]
 } deriving (Show)
 
+data Difficulty = Easy | Hard deriving (Eq, Show)
+
 data SearchState = SearchState {
-    ssState    :: State,
-    ssCost     :: Int,
-    ssBestCost :: Int,
-    ssSeen     :: Memo,
-    ssTurn     :: Bool,
-    ssIsHard   :: Bool
+    ssState      :: State,
+    ssCost       :: Int,
+    ssBestCost   :: Int,
+    ssSeen       :: Memo,
+    ssTurn       :: Bool,
+    ssDifficulty :: Difficulty
 } deriving (Show)
 
 type MemoKey = (Bool, Int, Int, Int, [Int])
@@ -155,22 +157,24 @@ search' ss
           seen = ssSeen ss
           key = memoKey (ssTurn ss) state
           (won', cost') = fromJust (M.lookup key seen)
-          decrementHp | ssIsHard ss = state { stHp = stHp state - 1 } | otherwise = state
+          decrementHp
+            | ssDifficulty ss == Hard = state { stHp = stHp state - 1 }
+            | otherwise = state
           state' = (decayEffects . applyEffects) decrementHp
           ss' = ss { ssState = state' }
           next | ssTurn ss = playerTurn | otherwise = bossTurn
 
-search :: Bool -> Int
-search isHard = cost
+search :: Difficulty -> Int
+search difficulty = cost
     where (_, cost, _) = search' SearchState {
-            ssIsHard   = isHard,
-            ssState    = initialState,
-            ssCost     = 0,
-            ssBestCost = maxBound :: Int,
-            ssTurn     = True,
-            ssSeen     = M.empty }
+            ssDifficulty = difficulty,
+            ssState      = initialState,
+            ssCost       = 0,
+            ssBestCost   = maxBound :: Int,
+            ssTurn       = True,
+            ssSeen       = M.empty }
 
 main :: IO ()
 main = do
-    putStrLn $ "Part 1: " ++ show (search False)
-    putStrLn $ "Part 2: " ++ show (search True)
+    putStrLn $ "Part 1: " ++ show (search Easy)
+    putStrLn $ "Part 2: " ++ show (search Hard)

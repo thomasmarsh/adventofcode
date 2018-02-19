@@ -5,7 +5,10 @@ import Data.Maybe
 import Data.List
 
 trans :: Char -> Int
-trans c | c == '(' = 1 | c == ')' = -1 | otherwise = 0
+trans c
+    | c == '('  = 1
+    | c == ')'  = -1
+    | otherwise = 0
 
 part1 :: String -> Int
 part1 = sum . map trans
