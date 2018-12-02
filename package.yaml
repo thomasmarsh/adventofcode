@@ -49,6 +49,9 @@ executables:
     - -with-rtsopts=-N
     - -O2
     - -Wall
+    - -Wincomplete-uni-patterns
+    - -Wincomplete-record-updates
+    - -Wmissing-import-lists
     - -Werror
     dependencies:
     - adventofcode
