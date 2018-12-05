@@ -71,7 +71,6 @@ part2 g = n * a
 
 run :: String -> IO ()
 run path = do
-    contents <- readFile path
-    let log = parse . sort . lines $ contents
+    log <- parse . sort . lines <$> readFile path
     putStrLn $ "Part 1: " ++ show (part1 log)
     putStrLn $ "Part 2: " ++ show (part2 log)

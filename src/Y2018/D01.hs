@@ -20,7 +20,6 @@ repeatedFreq xs = findDup S.empty xs'
 
 run :: String -> IO ()
 run path = do
-    contents <- readFile path
-    let ls = map parseNum $ lines contents
+    ls <- map parseNum . lines <$> readFile path
     putStrLn $ "Part 1: " ++ (show $ sum ls)
     putStrLn $ "Part 2: " ++ (show $ repeatedFreq ls)

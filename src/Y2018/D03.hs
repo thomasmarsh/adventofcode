@@ -40,7 +40,6 @@ parseMap xs = search M.empty initialIds ps 0
 
 run :: String -> IO ()
 run path = do
-    contents <- readFile path
-    let (count, i) = parseMap (lines contents)
+    (count, i) <- parseMap . lines <$> readFile path
     putStrLn $ "Part 1: " ++ (show count)
     putStrLn $ "Part 2: " ++ (show i)

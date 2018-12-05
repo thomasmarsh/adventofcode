@@ -27,7 +27,6 @@ findClosest xs
 
 run :: String -> IO ()
 run path = do
-    contents <- readFile path
-    let xs = lines contents
+    xs <- lines <$> readFile path
     putStrLn $ "Part 1: " ++ (show $ checksum xs)
     putStrLn $ "Part 2: " ++ findClosest xs

@@ -19,7 +19,6 @@ minReduction s = minimum ss
 
 run :: String -> IO ()
 run path = do
-    contents <- readFile path
-    let s = head $ words $ contents
+    s <- head . words <$> readFile path
     putStrLn $ "Part 1: " ++ show (reduce s)
     putStrLn $ "Part 2: " ++ show (minReduction s)
