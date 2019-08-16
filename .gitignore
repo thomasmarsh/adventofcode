@@ -6,3 +6,4 @@ adventofcode.cabal
 *~
 .*.swp
 .DS_Store
+stack.yaml.lock
