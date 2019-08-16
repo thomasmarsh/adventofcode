@@ -1,10 +1,10 @@
 name:                adventofcode
 version:             0.1.0.0
-github:              "thomasmarsh/adventofcode"
+github:              "githubuser/adventofcode"
 license:             BSD3
-author:              "Thomas Marsh"
-maintainer:          "thomas.marsh2@gmail.com"
-copyright:           "2015-2018 Thomas Marsh"
+author:              "Author name here"
+maintainer:          "example@example.com"
+copyright:           "2019 Author name here"
 
 extra-source-files:
 - README.md
@@ -17,24 +17,23 @@ extra-source-files:
 # To avoid duplicated efforts in documentation and dealing with the
 # complications of embedding Haddock markup inside cabal files, it is
 # common to point users to the README.md file.
-description:         Please see the README on Github at <https://github.com/githubuser/adventofcode#readme>
+description:         Please see the README on GitHub at <https://github.com/githubuser/adventofcode#readme>
 
 dependencies:
+- MissingH
 - aeson
 - array
 - base >= 4.7 && < 5
-- bool-extras
 - bytestring
 - containers
+- digits
+- parsec
 - pureMD5
 - scientific
 - split
 - text
 - unordered-containers
 - vector
-- MissingH
-- search-algorithms
-- parsec
 
 library:
   source-dirs: src
@@ -47,12 +46,6 @@ executables:
     - -threaded
     - -rtsopts
     - -with-rtsopts=-N
-    - -O2
-    - -Wall
-    - -Wincomplete-uni-patterns
-    - -Wincomplete-record-updates
-    - -Wmissing-import-lists
-    - -Werror
     dependencies:
     - adventofcode
 

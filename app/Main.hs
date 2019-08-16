@@ -2,7 +2,7 @@ module Main where
 
 import System.Environment (getArgs)
 
-import Y2017.D13 (run)
+import Y2018.D16 (run)
 
 main :: IO ()
 main = do
