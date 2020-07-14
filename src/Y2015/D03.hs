@@ -3,8 +3,8 @@ module Y2015.D03 where
 import System.Environment (getArgs)
 import Data.List (scanl, sort, group)
 
-move :: Char -> (Int, Int) -> (Int, Int)
-move c (x,y)
+move :: (Int, Int) -> Char -> (Int, Int)
+move (x,y) c
     | c == '^' = (x,y+1)
     | c == 'v' = (x,y-1)
     | c == '<' = (x-1,y)
@@ -12,7 +12,7 @@ move c (x,y)
     | otherwise = (x,y)
 
 houses :: String -> [(Int, Int)]
-houses = scanl (flip move) (0, 0)
+houses = scanl move (0, 0)
 
 unique :: Ord a => [a] -> Int
 unique = length . group . sort
